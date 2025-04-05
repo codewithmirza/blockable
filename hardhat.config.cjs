@@ -29,8 +29,11 @@ module.exports = {
       chainId: 1337
     },
     mumbai: {
-      url: process.env.MUMBAI_RPC_URL || "https://polygon-mumbai.g.alchemy.com/v2/demo",
+      url: process.env.MUMBAI_RPC_URL || "https://matic-mumbai.chainstacklabs.com",
+      chainId: 80001,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      gasPrice: "auto",
+      timeout: 100000,
       hyperlane: HYPERLANE_ADDRESSES.mumbai,
       verify: {
         etherscan: {

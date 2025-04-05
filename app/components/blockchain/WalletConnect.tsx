@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useConnect, useDisconnect, useAddress, useChain, useSwitchChain } from "@thirdweb-dev/react";
-import '../styles/components/wallet.scss';
+import '../../styles/components/wallet.scss';
 
 export default function WalletConnect() {
   const address = useAddress();

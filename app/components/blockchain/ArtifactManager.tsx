@@ -1,179 +1,77 @@
-
 import React, { useState } from 'react';
-import { useFetcher } from '@remix-run/react';
+import { useContract, useContractRead } from '@thirdweb-dev/react';
+
+interface Artifact {
+  id: string;
+  name: string;
+  type: string;
+  metadata: string;
+  createdAt: number;
+}
 
 export default function ArtifactManager() {
-  const [recipient, setRecipient] = useState('');
-  const [tokenURI, setTokenURI] = useState('');
-  const [metadataHash, setMetadataHash] = useState('');
-  const [tokenId, setTokenId] = useState('');
-  const [isCreating, setIsCreating] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
   
-  const fetcher = useFetcher();
-  
-  const handleCreate = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    setIsCreating(true);
-    setResult(null);
-    
-    fetcher.submit(
-      {
-        action: 'create_artifact',
-        data: JSON.stringify({
-          recipient,
-          tokenURI,
-          metadataHash: metadataHash || `0x${Array(64).fill('0').join('')}`
-        })
-      },
-      { method: 'post', action: '/api/blockchain' }
-    );
+  const { contract } = useContract(import.meta.env.VITE_BLOCKABLE_CONTRACT);
+  const { data: artifacts } = useContractRead(contract as any, "getAllArtifacts");
+
+  const handleArtifactSelect = (artifact: Artifact) => {
+    setSelectedArtifact(artifact);
   };
-  
-  const handleFetch = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    setIsFetching(true);
-    setResult(null);
-    
-    fetcher.submit(
-      {
-        action: 'get_artifact',
-        data: JSON.stringify({
-          tokenId: parseInt(tokenId)
-        })
-      },
-      { method: 'post', action: '/api/blockchain' }
-    );
-  };
-  
-  React.useEffect(() => {
-    if (fetcher.data) {
-      setIsCreating(false);
-      setIsFetching(false);
-      
-      if (fetcher.data.success) {
-        setResult(fetcher.data.result);
-        
-        // If artifact was created, store the token ID
-        if (fetcher.data.result.tokenId) {
-          setTokenId(fetcher.data.result.tokenId.toString());
-        }
-      } else {
-        setResult({ error: fetcher.data.error || 'An error occurred' });
-      }
-    }
-  }, [fetcher.data]);
-  
+
   return (
-    <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg shadow">
-      <h2 className="text-xl font-semibold mb-4">Regulatory-Compliant Artifact Manager</h2>
-      <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
-        Create and manage tokenized artifacts with HashKey's regulatory-compliant framework.
-      </p>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 className="text-lg font-medium mb-3">Create New Artifact</h3>
-          <form onSubmit={handleCreate} className="space-y-4">
-            <div>
-              <label htmlFor="recipient" className="block text-sm font-medium mb-1">
-                Recipient Address
-              </label>
-              <input
-                id="recipient"
-                type="text"
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-900"
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-                placeholder="0x..."
-                required
-              />
+    <div className="bg-white dark:bg-zinc-800 rounded-lg shadow p-6">
+      <h2 className="text-2xl font-bold mb-4">Artifact Manager</h2>
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Your Artifacts</h3>
+            <div className="max-h-64 overflow-y-auto">
+              {(artifacts as Artifact[])?.map((artifact) => (
+                <div
+                  key={artifact.id}
+                  className={`p-3 rounded-lg cursor-pointer ${
+                    selectedArtifact?.id === artifact.id
+                      ? 'bg-blue-100 dark:bg-blue-900'
+                      : 'bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600'
+                  }`}
+                  onClick={() => handleArtifactSelect(artifact)}
+                >
+                  <div className="font-medium">{artifact.name}</div>
+                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                    {artifact.type}
+                  </div>
+                </div>
+              ))}
             </div>
-            
-            <div>
-              <label htmlFor="token-uri" className="block text-sm font-medium mb-1">
-                Token URI
-              </label>
-              <input
-                id="token-uri"
-                type="text"
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-900"
-                value={tokenURI}
-                onChange={(e) => setTokenURI(e.target.value)}
-                placeholder="ipfs://..."
-                required
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="metadata-hash" className="block text-sm font-medium mb-1">
-                Metadata Hash (optional)
-              </label>
-              <input
-                id="metadata-hash"
-                type="text"
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-900"
-                value={metadataHash}
-                onChange={(e) => setMetadataHash(e.target.value)}
-                placeholder="0x..."
-              />
-            </div>
-            
-            <button
-              type="submit"
-              disabled={isCreating}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium disabled:opacity-50"
-            >
-              {isCreating ? 'Creating...' : 'Create Artifact'}
-            </button>
-          </form>
-        </div>
-        
-        <div>
-          <h3 className="text-lg font-medium mb-3">Fetch Artifact</h3>
-          <form onSubmit={handleFetch} className="space-y-4">
-            <div>
-              <label htmlFor="token-id" className="block text-sm font-medium mb-1">
-                Token ID
-              </label>
-              <input
-                id="token-id"
-                type="number"
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-900"
-                value={tokenId}
-                onChange={(e) => setTokenId(e.target.value)}
-                placeholder="1"
-                required
-              />
-            </div>
-            
-            <button
-              type="submit"
-              disabled={isFetching}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium disabled:opacity-50"
-            >
-              {isFetching ? 'Fetching...' : 'Fetch Artifact'}
-            </button>
-          </form>
-          
-          <div className="mt-4">
-            <h4 className="text-md font-medium mb-2">Artifact Information</h4>
-            {result && (
-              <div className={`p-3 rounded-md ${
-                result.error 
-                  ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                  : 'bg-zinc-100 dark:bg-zinc-900'
-              }`}>
-                {result.error ? (
-                  <p>{result.error}</p>
-                ) : (
-                  <pre className="text-sm overflow-auto whitespace-pre-wrap">
-                    {JSON.stringify(result, null, 2)}
-                  </pre>
-                )}
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Artifact Details</h3>
+            {selectedArtifact ? (
+              <div className="p-4 bg-zinc-100 dark:bg-zinc-700 rounded-lg">
+                <div className="space-y-2">
+                  <div>
+                    <span className="font-medium">Name:</span> {selectedArtifact.name}
+                  </div>
+                  <div>
+                    <span className="font-medium">Type:</span> {selectedArtifact.type}
+                  </div>
+                  <div>
+                    <span className="font-medium">Created:</span> {new Date(selectedArtifact.createdAt * 1000).toLocaleString()}
+                  </div>
+                  <div>
+                    <span className="font-medium">Metadata:</span>
+                    <pre className="mt-2 p-2 bg-zinc-200 dark:bg-zinc-600 rounded overflow-x-auto">
+                      {selectedArtifact.metadata}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-4 bg-zinc-100 dark:bg-zinc-700 rounded-lg text-center">
+                <p className="text-zinc-600 dark:text-zinc-400">
+                  Select an artifact to view details
+                </p>
               </div>
             )}
           </div>
