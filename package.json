@@ -82,8 +82,11 @@
     "shiki": "^1.9.1",
     "unist-util-visit": "^5.0.0",
     "web3": "^4.16.0",
-    "@thirdweb-dev/react": "^3.14.4",
-    "@thirdweb-dev/sdk": "^3.14.4"
+    "@thirdweb-dev/react": "^3.10.67",
+    "@thirdweb-dev/sdk": "^3.10.67",
+    "@remix-run/css-bundle": "^2.8.1",
+    "@remix-run/node": "^2.8.1",
+    "sass": "^1.70.0"
   },
   "devDependencies": {
     "@blitz/eslint-plugin": "0.1.0",
@@ -102,7 +105,6 @@
     "is-ci": "^3.0.1",
     "node-fetch": "^3.3.2",
     "prettier": "^3.3.2",
-    "sass": "^1.69.5",
     "sass-embedded": "^1.86.3",
     "typescript": "^5.1.6",
     "unified": "^11.0.5",
