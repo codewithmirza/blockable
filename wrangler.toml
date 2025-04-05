@@ -1,0 +1,26 @@
+
+name = "blockable"
+compatibility_flags = ["nodejs_compat"] 
+compatibility_date = "2024-07-01"
+pages_build_output_dir = "./build/client"
+
+[ai]
+binding = "AI"
+model = "@cf/meta/llama-3-8b-instruct"
+
+[[kv_namespaces]]
+binding = "CHAT_HISTORY"
+id = "chat-history"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "blockable"
+database_id = "blockable-db"
+
+[durable_objects]
+bindings = [
+  { name = "AGENT_STATE", class_name = "AgentState", script_name = "blockable" }
+]
+
+[env.production]
+vars = { ENVIRONMENT = "production" }

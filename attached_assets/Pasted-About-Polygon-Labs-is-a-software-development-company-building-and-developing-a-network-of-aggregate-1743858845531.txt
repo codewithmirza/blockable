@@ -1,0 +1,109 @@
+About
+Polygon Labs is a software development company building and developing a network of aggregated blockchains via the AggLayer, secured by Ethereum.
+As public infrastructure, the AggLayer will bring together user bases and liquidity for any connected chain, and leverage Ethereum as a settlement layer.
+Polygon Labs has also contributed to the core development of several widely-adopted scaling protocols and tools for launching blockchains, including Polygon PoS, Polygon zkEVM, and Polygon Miden, which is in development as well as Polygon CDK.
+Prizes
+🏆 Real World Anything ⸺ $6,000
+🥇
+1st Place
+$2,000
+🥈
+2nd Place
+$2,000
+🥉
+3rd Place
+$2,000
+No rules, no limits — just build something awesome on Polygon. If it runs on Polygon, it’s eligible. We want to see your creativity, your hustle, and your edge.
+This is the open category for hackers who think outside the box.
+Here are some 🧰 Resources You Can Use:
+• Fork, clone, or just use the Polygon MCP Server. Model Context Protocol (MCP) is an open protocol that allows large language models to subscribe to and consume structured data from various sources (e.g. APIs, on-chain data, filesystems). Build adapters that connect agents to real-time data (e.g., blockchain state, weather APIs, docs, Slack, Notion, Discord).
+• Use GOAT SDK by Crossmint - the largest agentic finance toolkit for AI agents. GOAT leverages blockchains, cryptocurrencies (such as stablecoins), and wallets as the infrastructure to enable agents to become economic actors.
+• Use the Social Agent Toolkit by Sentient to create your own AI agents on Twitter, Discord, and Telegram. Make your agents verifiable by deploying inside AWS Nitro Enclaves with the Sentient Enclaves Framework.
+• Use the AI wearable by Omi (omi.me) to transcribe your live conversations and use agents to take real-time actions based on keywords like vibing code without even touching the keyboard (actionitem.app).
+• Use one of the Polygon SDKs: Polygon.js, Web3.js, Ethers.js
+• Use one of these Infra tools: Alchemy, The Graph, Chainlink, IPFS
+• Use any of these Libraries: Hardhat, Foundry, OpenZeppelin, Thirdweb, Scaffold-ETH
+Qualification Requirements
+🔧 Just Make Sure It’s:
+• Deployed or running on Polygon PoS, Polygon zkEVM, or Polygon CDK
+• Functional (it doesn’t have to be perfect!)
+• Creative, original, or technically impressive
+💡 Need some inspiration?
+• Create Open-Source Developer Tools: Libraries, schemas, or SDKs that make it easy for any AI developer to plug into the context layer.
+• Agentic Interop: Enable multiple AI agents to communicate, share memory, and work collaboratively using shared context schemas or pub/sub messaging.
+• A new DeFi primitive we've never seen
+• A zk-powered identity experiment
+• An NFT-based community or loyalty app
+• A fun, weird, viral toy that makes people smile
+
+Links and Resources
+Sentient Social Agent
+https://github.com/sentient-agi/Sentient-Social-Agent
+↗
+Sentient Agent Examples
+https://github.com/sentient-agi/Sentient-Agent-Framework-Examples
+↗
+Goat SDK for Agents
+https://github.com/goat-sdk/goat
+↗
+Sentient Enclaves
+https://github.com/sentient-agi/Sentient-Enclaves-Framework
+↗
+Sentient Unhinged Dobby Model
+https://fireworks.ai/models/sentientfoundation/dobby-unhinged-llama-3-3-70b-new
+↗
+Omi Real-time Transcripts Map Notes
+https://github.com/sanjayamirthraj/local-notes/
+↗
+Omi Memories into Action Items
+http://actionitem.app
+↗
+Sentient Models
+https://huggingface.co/SentientAGI
+↗
+Omi Getting Started
+https://docs.omi.me/docs/developer/apps/Introduction
+↗
+Polygon MCP
+https://mcp.so/server/polygon-mcp
+↗
+OpenDeepSearch
+https://github.com/sentient-agi/OpenDeepSearch
+↗
+📱 Real World Payments ⸺ $2,000
+Build a seamless web3 payment experience that feels as smooth and familiar as using a Web2 app like Venmo or Cash App. Your mission is to remove the typical friction points in crypto payments—wallet setup, gas fees, complex UX—and design something your non-crypto friends would actually use.
+Qualification Requirements
+Your submission should include:
+• Simplified onboarding: support for social login (Google, Twitter, etc.), embedded wallet creation, or one-click signup flows.
+• Gasless transactions: use account abstraction, meta-transactions, or paymaster models to eliminate gas for the user.
+• Real-world use case: think peer-to-peer payments, tipping, subscriptions, marketplace checkout, or remittances.
+• Bonus: fiat on-ramps, transaction history UX, multi-chain support, or mobile-optimized design.
+
+🏦 Real World Assets ⸺ $2,000
+Bring real-world value on-chain using Polygon’s fast, low-cost infrastructure. Whether it’s Pokémon-style digital collectibles, tokenized real estate, yield-bearing stablecoins, or DeFi products backed by real-world assets—your goal is to make RWA accessible, liquid, and programmable for anyone, anywhere.
+🛠️ What You Can Build
+Some ideas to inspire you:
+• Collectibles: Tokenized physical or IP-based items (Pokémon-style NFTs, luxury goods, etc.)
+• Real Estate: On-chain marketplaces for fractional property ownership or real estate-backed tokens
+• Stablecoins: Region-specific or asset-backed coins, especially those with innovative yield or governance mechanics
+• Perpetuals & Synthetic Assets: Tradeable instruments backed by RWAs, like stocks, bonds, or commodities
+• Bonus points for: Chainlink data feeds, zk-proof attestation layers, or compliance tooling
+Qualification Requirements
+🔧 Just Make Sure It’s:
+• Deployed or running on Polygon Proof of Stake
+• Functional (it doesn’t have to be perfect!)
+• Creative, original, or technically impressive
+
+Resources
+polygon.technology
+https://polygon.technology
+↗
+0xPolygon
+https://twitter.com/0xPolygon
+↗
+Polygon MCP Server
+https://github.com/dablclub/polygon-mcp
+↗
+Start Building on Polygon with MCP Servers
+https://youtu.be/EkMBPeJvnzI
+↗

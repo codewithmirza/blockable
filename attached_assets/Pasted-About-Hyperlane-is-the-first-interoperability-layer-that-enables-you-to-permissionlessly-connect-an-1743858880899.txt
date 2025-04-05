@@ -1,0 +1,34 @@
+About
+Hyperlane is the first interoperability layer that enables you to permissionlessly connect any blockchain, out-of-the-box. With Hyperlane you can connect your app to any chain, and easily have interchain function calls or asset transfers. Hyperlane has a modular security stack, that allows you to configure your security model, and customize the security protocol you use to fit the action of your users.
+Prizes
+🥇 Best Use of Hyperlane ⸺ $4,000
+Up to 2 teams will receive $2,000
+The grand prize will be given to the most compelling submissions made during the hackathon. It can qualify under any of the categories below, so be sure to read them to get some ideas! Think of the grand prize as an extension of the category prizes.
+Qualification Requirements
+Get in touch with the Hyperlane team for more details! Join our discord to engage & get support.
+Depending on the quality of submissions relative to other categories, Hyperlane may award several projects.
+
+🧩 Best Use of Open Intents Framework ⸺ $3,000
+Up to 2 teams will receive $1,500
+The Open Intents Framework (OIF) is designed to make cross-chain execution seamless by enabling intent-based transactions. Instead of users having to manually bridge assets or approve multiple transactions, OIF lets them express what they want, and solvers handle execution behind the scenes.
+For this category, we're looking for the best integration of OIF using Hyperlane.
+Qualification Requirements
+Get in touch with the Hyperlane team for more details! Join our discord to engage & get support.
+Depending on the quality of submissions relative to other categories, Hyperlane may award several OIF projects.
+
+Links and Resources
+Open Intents Framework
+https://www.openintents.xyz/
+↗
+🚝 Best Infrastructure ⸺ $3,000
+This category is for building infrastructure that either enhances Hyperlane or makes use of Hyperlane's capabilities. Maybe you’ll build a customized Deploy tool to bundle Hyperlane with any OP Chain deployment? Or perhaps you’d build a way to more easily connect chains with Hyperlane? Maybe you’ll build a tool to allow any chain to get access to oracle feeds from any chain? You decide!
+Qualification Requirements
+Get in touch with the Hyperlane team for more details! Join our discord to engage & get support.
+
+Resources
+Website
+https://hyperlane.xyz/
+↗
+Docs
+https://docs.hyperlane.xyz/
+↗

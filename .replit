@@ -1,0 +1,184 @@
+modules = ["nodejs-18", "bash"]
+run = "npm run dev"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "NODE_ENV=production PORT=5000 pnpm run preview"]
+build = ["sh", "-c", "pnpm install"]
+
+[[ports]]
+localPort = 3000
+
+[[ports]]
+localPort = 5000
+
+[workflows]
+runButton = "Blockable Run"
+
+[[workflows.workflow]]
+name = "Dev"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm run dev -- --host 0.0.0.0"
+
+[[workflows.workflow]]
+name = "Start Blockable"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=5000 pnpm run dev -- --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "Blockable"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "NODE_ENV=production PORT=5000 pnpm run dev -- --host 0.0.0.0 --port 5000 --no-watch"
+
+[[workflows.workflow]]
+name = "Blockable Dev"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=5000 pnpm run dev --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "Blockable Dev with Wallet"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "THIRDWEB_CLIENT_ID=\"\" NODE_ENV=development PORT=5000 pnpm run dev -- --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "Blockable Dev Fixed"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=5000 pnpm run dev -- --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "Blockable Dev Full"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=5000 remix vite:dev -- --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "Blockable Dev Production"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "VITE_THIRDWEB_CLIENT_ID=0f254f5b294d47a6e7ce6a4b593b8613 PORT=5000 pnpm run dev -- --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "Blockable Fix"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=5000 pnpm run dev --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "Blockable Run"
+author = 29597567
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f node || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=5000 NODE_ENV=development remix vite:dev --host 0.0.0.0 --port 5000"
