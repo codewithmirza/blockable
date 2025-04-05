@@ -116,8 +116,8 @@
     "vitest": "^2.0.1",
     "wrangler": "^3.63.2",
     "zod": "^3.23.8",
-    "@typescript-eslint/eslint-plugin": "^6.7.4",
-    "eslint": "^8.38.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "^6.7.1",
@@ -125,6 +125,6 @@
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "resolutions": {
-    "@typescript-eslint/utils": "^8.0.0-alpha.30"
+    "@typescript-eslint/utils": "^8.29.0"
   }
 }
