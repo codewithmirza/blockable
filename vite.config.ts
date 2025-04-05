@@ -56,6 +56,9 @@ export default defineConfig((config) => {
           additionalData: `@import "@/styles/variables.scss";`,
         },
       },
+      modules: {
+        localsConvention: 'camelCase',
+      },
     },
   };
 });

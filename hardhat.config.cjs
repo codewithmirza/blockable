@@ -1,4 +1,4 @@
-require("@nomicfoundation/hardhat-ethers");
+require("@nomiclabs/hardhat-ethers");
 require('dotenv').config({ path: '.env' });
 
 // Define Hyperlane addresses for various networks
