@@ -4,11 +4,18 @@ import { defineConfig, type ViteDevServer } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { optimizeCssModules } from 'vite-plugin-optimize-css-modules';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import react from '@vitejs/plugin-react';
+import sass from 'vite-plugin-sass';
+import { vitePluginRemix } from 'vite-plugin-remix';
+import { resolve } from 'path';
 
 export default defineConfig((config) => {
   return {
     build: {
       target: 'esnext',
+      rollupOptions: {
+        external: ['path'],
+      },
     },
     server: {
       host: '0.0.0.0',
@@ -34,7 +41,22 @@ export default defineConfig((config) => {
       tsconfigPaths(),
       chrome129IssuePlugin(),
       config.mode === 'production' && optimizeCssModules({ apply: 'build' }),
+      react(),
+      sass(),
+      vitePluginRemix(),
     ].filter(Boolean),
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, './app'),
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "@/styles/variables.scss";`,
+        },
+      },
+    },
   };
 });
 
