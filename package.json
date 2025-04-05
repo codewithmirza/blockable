@@ -125,7 +125,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "@vitejs/plugin-react": "^4.2.1",
     "vite-plugin-remix": "^0.1.0",
-    "vite-plugin-sass": "^1.0.0"
+    "sass": "^1.70.0"
   },
   "resolutions": {
     "@typescript-eslint/utils": "^8.29.0",

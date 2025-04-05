@@ -27,15 +27,11 @@ jobs:
           node-version: '18'
           cache: 'npm'
       
-      - name: Clean install dependencies
-        run: |
-          rm -f package-lock.json
-          npm install --legacy-peer-deps
+      - name: Install dependencies
+        run: npm install
       
       - name: Build
-        run: |
-          npm run build
-          vite build
+        run: npm run build
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -43,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: './build'
 
   deploy:
     environment:
