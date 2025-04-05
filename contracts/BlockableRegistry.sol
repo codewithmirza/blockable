@@ -1,10 +1,9 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@hyperlane-xyz/sdk/contracts/interfaces/IMailbox.sol";
-import "@hyperlane-xyz/sdk/contracts/interfaces/IInterchainGasPaymaster.sol";
+import "@hyperlane-xyz/core/contracts/interfaces/IMailbox.sol";
+import "@hyperlane-xyz/core/contracts/interfaces/IInterchainGasPaymaster.sol";
 
 /**
  * @title BlockableRegistry
@@ -49,7 +48,7 @@ contract BlockableRegistry is Ownable {
         bytes32 recipient = registeredContracts[destinationDomain];
         require(recipient != bytes32(0), "BlockableRegistry: destination contract not registered");
         
-        uint256 messageId = mailbox.dispatch(destinationDomain, recipient, message);
+        bytes32 messageId = mailbox.dispatch(destinationDomain, recipient, message);
         
         // Pay for gas if value is provided
         if (msg.value > 0) {

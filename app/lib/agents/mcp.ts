@@ -1,7 +1,20 @@
-
-import { Agent } from '@cloudflare/ai';
 import { BlockchainService } from '../blockchain';
 import { ethers } from 'ethers';
+import { Agent } from 'agents';
+
+// Define Agent environment and state types
+interface MCPAgentEnv {
+  CLOUDFLARE_API_TOKEN?: string;
+  CLOUDFLARE_ACCOUNT_ID?: string;
+  AI?: any;
+}
+
+interface MCPAgentState {
+  initialized: boolean;
+  dataSources: Record<string, MCPDataSource>;
+  subscriptions: Record<string, MCPSubscription>;
+  contextCache: Record<string, MCPContext>;
+}
 
 // Define Model Context Protocol interfaces
 export interface MCPMessage {
@@ -38,24 +51,21 @@ export interface MCPContext {
   };
 }
 
-export class MCPAgent {
-  private ai: Agent;
+export class MCPAgent extends Agent<MCPAgentEnv, MCPAgentState> {
   private blockchainService: BlockchainService | null = null;
   private dataSources: Map<string, MCPDataSource> = new Map();
   private subscriptions: Map<string, MCPSubscription> = new Map();
   private contextCache: Map<string, MCPContext> = new Map();
   
-  constructor() {
-    this.ai = new Agent({
-      binding: 'AI',
-      model: '@cf/meta/llama-3-8b-instruct'
-    });
+  constructor(ctx: any = {}, env: MCPAgentEnv = {}) {
+    super(ctx, env);
+    // No longer initialize ai property here
   }
 
   async initialize(config: any) {
     const { createBlockchainService } = await import('../blockchain');
     this.blockchainService = createBlockchainService({
-      rpcUrl: config.rpcUrl || 'https://rpc-mumbai.maticvigil.com',
+      rpcUrl: config.rpcUrl || 'https://rpc.ankr.com/polygon_mumbai',
       privateKey: config.privateKey,
       blockableAddress: config.blockableAddress,
       registryAddress: config.registryAddress
@@ -66,7 +76,7 @@ export class MCPAgent {
       id: 'polygon-onchain',
       type: 'onchain',
       config: {
-        rpcUrl: 'https://rpc-mumbai.maticvigil.com',
+        rpcUrl: 'https://rpc.ankr.com/polygon_mumbai',
         chainId: 80001
       },
       lastUpdated: Date.now()
@@ -212,42 +222,56 @@ export class MCPAgent {
 - Cross-chain messaging capabilities`;
     }
     
-    const result = await this.ai.run('@cf/meta/llama-3-8b-instruct', {
-      messages: [{ 
-        role: 'user', 
-        content: `Parse the following user intent into structured blockchain action.${contextPrompt}
-        
-        ${chainContext}
-        
-        Intent: "${intent}"
-        
-        Return a JSON object with 'action' and 'params' fields that map this intent to one of:
-        1. deploy_contract
-        2. generate_contract
-        3. create_artifact
-        4. send_cross_chain_message
-        5. register_intent
-        6. query_onchain_data
-        7. execute_transaction
-        8. setup_compliance
-        9. tokenize_asset
-        10. create_kyc_process
-        
-        For example:
-        { 
-          "action": "generate_contract", 
-          "params": { 
-            "contractType": "ERC721", 
-            "features": ["mintable", "burnable"] 
-          } 
-        }`
-      }]
-    });
-    
     try {
-      return JSON.parse(result.response);
+      // Use env.AI directly instead of the Agent class from @cloudflare/ai
+      const response = await fetch('https://api.cloudflare.com/client/v4/accounts/ai/run/@cf/meta/llama-3-8b-instruct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: [{ 
+            role: 'user', 
+            content: `Parse the following user intent into structured blockchain action.${contextPrompt}
+            
+            ${chainContext}
+            
+            Intent: "${intent}"
+            
+            Return a JSON object with 'action' and 'params' fields that map this intent to one of:
+            1. deploy_contract
+            2. generate_contract
+            3. create_artifact
+            4. send_cross_chain_message
+            5. register_intent
+            6. query_onchain_data
+            7. execute_transaction
+            8. setup_compliance
+            9. tokenize_asset
+            10. create_kyc_process
+            
+            For example:
+            { 
+              "action": "generate_contract", 
+              "params": { 
+                "contractType": "ERC721", 
+                "features": ["mintable", "burnable"] 
+              } 
+            }`
+          }]
+        })
+      });
+      
+      const result = await response.json() as { result?: { response?: string } };
+      
+      // Extract response from result
+      if (result.result && result.result.response) {
+        return JSON.parse(result.result.response);
+      } else {
+        throw new Error("Invalid AI response format");
+      }
     } catch (e) {
-      console.error("Failed to parse AI response:", e);
+      console.error("Failed to process or parse AI response:", e);
       return {
         action: "unknown",
         params: { error: "Failed to parse intent", chain }

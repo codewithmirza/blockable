@@ -22,7 +22,7 @@ const CHAIN_OPTIONS: ChainOption[] = [
       'Polygon zkEVM',
       'Polygon CDK'
     ],
-    testnetUrl: 'https://rpc-mumbai.maticvigil.com'
+    testnetUrl: 'https://rpc.ankr.com/polygon_mumbai'
   },
   {
     id: 'hashkey',

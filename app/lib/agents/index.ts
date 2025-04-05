@@ -1,6 +1,17 @@
-
-import { Agent } from '@cloudflare/ai';
 import { WebSocket } from '@cloudflare/workers-types';
+import { Agent } from 'agents';
+import type { AgentNamespace } from 'agents';
+
+// Define reusable environment and state interfaces
+interface BaseAgentEnv {
+  CLOUDFLARE_API_TOKEN?: string;
+  CLOUDFLARE_ACCOUNT_ID?: string;
+  AI?: any;
+}
+
+interface BaseAgentState {
+  initialized: boolean;
+}
 
 export interface AgentTask {
   type: string;
@@ -194,7 +205,7 @@ export class AgentManager {
   async getAgent(agentName: string) {
     if (agentName === 'mcp' && !this.mcpInitialized) {
       await this.initializeMCP({
-        rpcUrl: 'https://rpc-mumbai.maticvigil.com',
+        rpcUrl: 'https://rpc.ankr.com/polygon_mumbai',
         privateKey: 'dummy-key-for-example'
       });
     }
@@ -319,13 +330,10 @@ export class AgentManager {
 }
 
 abstract class BaseAgent {
-  protected ai: Agent;
+  protected ai: any;
   
   constructor() {
-    this.ai = new Agent({
-      binding: 'AI',
-      model: '@cf/meta/llama-3-8b-instruct'
-    });
+    this.ai = null;
   }
 
   abstract execute(task: AgentTask): Promise<any>;
@@ -345,7 +353,7 @@ class BlockchainAgent extends BaseAgent {
     if (!this.blockchainService) {
       const { createBlockchainService } = await import('../blockchain');
       this.blockchainService = createBlockchainService({
-        rpcUrl: task.input.rpcUrl || 'https://rpc-mumbai.maticvigil.com',
+        rpcUrl: task.input.rpcUrl || 'https://rpc.ankr.com/polygon_mumbai',
         privateKey: task.input.privateKey,
         blockableAddress: task.input.blockableAddress,
         registryAddress: task.input.registryAddress

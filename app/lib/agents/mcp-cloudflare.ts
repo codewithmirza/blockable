@@ -1,13 +1,27 @@
+import type { MCPContext, MCPDataSource, MCPMessage, MCPSubscription } from './mcp';
+import { Agent } from 'agents';
 
-import { MCPContext, MCPDataSource, MCPMessage, MCPSubscription } from './mcp';
+// Define environment and state types
+interface CloudflareMCPAgentEnv {
+  CLOUDFLARE_API_TOKEN?: string;
+  CLOUDFLARE_ACCOUNT_ID?: string;
+}
 
-export class CloudflareMCPAgent {
+interface CloudflareMCPAgentState {
+  accountId: string;
+  configuredAt: number;
+  workflowIds: Record<string, string>;
+  dataSources: Record<string, MCPDataSource>;
+}
+
+export class CloudflareMCPAgent extends Agent<CloudflareMCPAgentEnv, CloudflareMCPAgentState> {
   private apiToken: string;
   private accountId: string;
   private workflowIds: Map<string, string> = new Map();
   private dataSources: Map<string, MCPDataSource> = new Map();
 
-  constructor(apiToken: string, accountId: string) {
+  constructor(apiToken: string, accountId: string, ctx: any = {}, env: CloudflareMCPAgentEnv = {}) {
+    super(ctx, env);
     this.apiToken = apiToken;
     this.accountId = accountId;
   }
@@ -22,10 +36,18 @@ export class CloudflareMCPAgent {
         id: 'polygon-onchain',
         type: 'onchain',
         config: {
-          rpcUrl: 'https://rpc-mumbai.maticvigil.com',
+          rpcUrl: 'https://rpc.ankr.com/polygon_mumbai',
           chainId: 80001
         },
         lastUpdated: Date.now()
+      });
+      
+      // Store important authentication information in Agent's state
+      await this.setState({
+        accountId: this.accountId,
+        configuredAt: Date.now(),
+        workflowIds: Object.fromEntries(this.workflowIds),
+        dataSources: Object.fromEntries(this.dataSources)
       });
       
       return this;
@@ -155,9 +177,13 @@ export class CloudflareMCPAgent {
         })
       });
       
-      const data = await response.json();
+      const data = await response.json() as { success: boolean; errors?: Array<{ message: string }>; result?: { id: string } };
       if (!data.success) {
         throw new Error(`Failed to create workflow: ${data.errors?.[0]?.message || 'Unknown error'}`);
+      }
+      
+      if (!data.result) {
+        throw new Error('No result returned from workflow creation');
       }
       
       return data.result.id;
@@ -194,9 +220,13 @@ export class CloudflareMCPAgent {
         })
       });
       
-      const data = await response.json();
+      const data = await response.json() as { success: boolean; errors?: Array<{ message: string }>; result?: { id: string } };
       if (!data.success) {
         throw new Error(`Workflow execution failed: ${data.errors?.[0]?.message || 'Unknown error'}`);
+      }
+      
+      if (!data.result) {
+        throw new Error('No result returned from workflow execution');
       }
       
       // Wait for workflow completion
@@ -208,7 +238,7 @@ export class CloudflareMCPAgent {
       console.error('Error processing intent:', error);
       return {
         action: 'error',
-        params: { message: `Failed to process intent: ${error.message}` }
+        params: { message: `Failed to process intent: ${error instanceof Error ? error.message : String(error)}` }
       };
     }
   }
@@ -236,9 +266,13 @@ export class CloudflareMCPAgent {
         })
       });
       
-      const data = await response.json();
+      const data = await response.json() as { success: boolean; errors?: Array<{ message: string }>; result?: { id: string } };
       if (!data.success) {
         throw new Error(`Workflow execution failed: ${data.errors?.[0]?.message || 'Unknown error'}`);
+      }
+      
+      if (!data.result) {
+        throw new Error('No result returned from workflow execution');
       }
       
       // Wait for workflow completion
@@ -274,9 +308,13 @@ export class CloudflareMCPAgent {
         })
       });
       
-      const data = await response.json();
+      const data = await response.json() as { success: boolean; errors?: Array<{ message: string }>; result?: { id: string } };
       if (!data.success) {
         throw new Error(`Workflow execution failed: ${data.errors?.[0]?.message || 'Unknown error'}`);
+      }
+      
+      if (!data.result) {
+        throw new Error('No result returned from workflow execution');
       }
       
       // Wait for workflow completion
@@ -309,14 +347,23 @@ export class CloudflareMCPAgent {
         }
       });
       
-      const data = await response.json();
+      const data = await response.json() as { 
+        success: boolean; 
+        errors?: Array<{ message: string }>; 
+        result?: { 
+          id: string; 
+          status: string; 
+          output: any; 
+          error?: string 
+        } 
+      };
       if (!data.success) {
         throw new Error(`Failed to check workflow status: ${data.errors?.[0]?.message || 'Unknown error'}`);
       }
       
-      if (data.result.status === 'completed') {
+      if (data.result && data.result.status === 'completed') {
         return data.result.output;
-      } else if (data.result.status === 'failed') {
+      } else if (data.result && data.result.status === 'failed') {
         throw new Error(`Workflow execution failed: ${data.result.error || 'Unknown error'}`);
       }
       
@@ -359,7 +406,7 @@ export class CloudflareMCPAgent {
   }
 }
 
-export const createCloudflareAgent = async (apiToken: string, accountId: string): Promise<CloudflareMCPAgent> => {
-  const agent = new CloudflareMCPAgent(apiToken, accountId);
+export const createCloudflareAgent = async (apiToken: string, accountId: string, ctx: any = {}): Promise<CloudflareMCPAgent> => {
+  const agent = new CloudflareMCPAgent(apiToken, accountId, ctx);
   return await agent.initialize();
 };
